@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhump.blog.mapper.UserInfoMappper" >
+  <resultMap id="BaseResultMap" type="com.zhump.blog.model.vo.UserInfoVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="head_img" property="head_img" jdbcType="VARCHAR" />
+    <result column="login_num" property="login_num" jdbcType="INTEGER" />
+    <result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="update_time" jdbcType="TIMESTAMP" />
+    <result column="login_time" property="login_time" jdbcType="TIMESTAMP" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+      <result column="locked" property="locked" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name, password, salt, address, head_img, login_num, create_time, update_time, login_time,
+    email, phone,locked
+  </sql>
+
+  <insert id="add" parameterType="com.zhump.blog.model.dto.UserInfoDTO">
+    insert into user_info(name, password, salt, address, head_img, login_num, create_time, login_time,email, phone,locked)
+
+    values (#{name},#{password},#{salt},#{address},#{head_img},#{login_num}，now(),#{login_time},#{email},#{phone},#{locked}})
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from user_info
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+
+      select
+        <include refid="Base_Column_List" />
+      from user_info
+
+  </select>
+
+  <!--根据账户和密码查询-->
+  <select id="loginAuth" resultMap="BaseResultMap" parameterType="com.zhump.blog.model.dto.UserInfoDTO">
+    select
+      <include refid="Base_Column_List"/>
+    from user_info where name = #{name}
+
+  </select>
+
+  <!--根据账户和密码查询-->
+  <select id="getId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List"/>
+    from user_info where id = #{id}
+
+  </select>
+
+  <!--根据id去修改-->
+  <update id="update" parameterType="com.zhump.blog.model.dto.UserInfoDTO">
+    update user_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="head_img != null" >
+        head_img = #{head_img,jdbcType=VARCHAR},
+      </if>
+      <if test="login_num != null" >
+        login_num = #{login_num,jdbcType=VARCHAR},
+      </if>
+      <if test="login_time != null" >
+        login_time = #{login_time,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="locked != null" >
+        locked = #{locked,jdbcType=VARCHAR},
+      </if>
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--删除-->
+  <update id="delete" parameterType="long">
+    delete from user_info where id = #{user_id}
+  </update>
+  
+</mapper>

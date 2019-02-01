@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhump.blog.mapper.RoleInfoMappper" >
+  <resultMap id="BaseResultMap" type="com.zhump.blog.model.vo.RoleInfoVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="update_time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name ,create_time,update_time
+  </sql>
+
+
+  <insert id="add" parameterType="com.zhump.blog.model.dto.RoleInfoDTO">
+    INSERT into role_info(id,name,create_time,update_time)
+    values  (#{id},#{name},#{create_time},#{update_time})
+  </insert>
+
+  <select id="getId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from role_info where id=#{id}
+
+  </select>
+
+  <select id="count" resultType="int">
+    select count(*) from role_info
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from role_info
+  </select>
+
+  <!--根据id去修改-->
+  <update id="update" parameterType="com.zhump.blog.model.dto.RoleInfoDTO">
+    update role_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
